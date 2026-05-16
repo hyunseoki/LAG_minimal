@@ -142,3 +142,4 @@ dmypy.json
 .pyre/
 
 .DS_Store
+notebook/
