@@ -6,7 +6,6 @@ sys.path.append(os.path.dirname(os.path.dirname(os.path.dirname(os.path.dirname(
 import torch
 import numpy as np
 from typing import Literal
-import matplotlib.pyplot as plt
 from abc import ABC, abstractmethod
 from ..utils.utils import get_root_dir
 from .baseline_actor import BaselineActor

@@ -1,4 +1,3 @@
-from envs.JSBSim.human_task.HumanFreeFlyTask import HumanFreeFlyTask
 from .env_base import BaseEnv
 from ..tasks.heading_task import HeadingTask
 
@@ -17,8 +16,6 @@ class SingleControlEnv(BaseEnv):
         taskname = getattr(self.config, 'task', None)
         if taskname == 'heading':
             self.task = HeadingTask(self.config)
-        elif taskname == "HumanFreeFly":
-            self.task = HumanFreeFlyTask(self.config)
         else:
             raise NotImplementedError(f'Unknown taskname: {taskname}')
 
