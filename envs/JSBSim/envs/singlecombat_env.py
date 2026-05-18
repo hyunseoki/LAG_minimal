@@ -2,7 +2,6 @@ import numpy as np
 from .env_base import BaseEnv
 from ..tasks import SingleCombatTask, SingleCombatDodgeMissileTask, HierarchicalSingleCombatDodgeMissileTask, \
     HierarchicalSingleCombatShootTask, SingleCombatShootMissileTask, HierarchicalSingleCombatTask
-from ..human_task.HumanSingleCombatTask import  HumanSingleCombatTask
 
 
 class SingleCombatEnv(BaseEnv):
