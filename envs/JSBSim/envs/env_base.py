@@ -219,22 +219,6 @@ class BaseEnv(gymnasium.Env):
                     log_msg = sim.log()
                     if log_msg is not None:
                         f.write(log_msg + "\n")
-        elif mode == "real_time":
-            timestamp = self.current_step * self.time_interval
-            data = [f"#{timestamp:.2f}\n"]
-            for sim in self._jsbsims.values():
-                log_msg = sim.log()
-                if log_msg is not None:
-                    data.append(log_msg + "\n")
-        
-            for sim in self._tempsims.values():
-                log_msg = sim.log()
-                if log_msg is not None:
-                    data.append(log_msg + "\n")
-
-            data_str = "".join(data)
-            # send data to tacview
-            tacview.send_data_to_client(data_str)
         else:
             raise NotImplementedError
 
