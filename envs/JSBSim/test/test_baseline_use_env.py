@@ -18,7 +18,7 @@ class BaselineAgent(ABC):
     def __init__(self, agent_id) -> None:
         self.model_path = get_root_dir() + '/model/baseline_model.pt'
         self.actor = BaselineActor()
-        self.actor.load_state_dict(torch.load(self.model_path, weights_only=True))
+        self.actor.load_state_dict(torch.load(self.model_path, map_location='cpu'))
         self.actor.eval()
         self.agent_id = agent_id
         self.state_var = [
@@ -96,7 +96,7 @@ class PursueAgent(BaselineAgent):
 
 
 class ManeuverAgent(BaselineAgent):
-    def __init__(self, agent_id, maneuver: Literal['l', 'r', 'n']) -> None:
+    def __init__(self, agent_id, maneuver: Literal['l', 'r', 'n', 'triangle']) -> None:
         super().__init__(agent_id)
         self.turn_interval = 30
         self.dodge_missile = False # if set true, start turn when missile is detected
@@ -142,7 +142,7 @@ def test_maneuver():
     env = SingleCombatEnv(config_name='1v1/NoWeapon/test/opposite')
     obs = env.reset()
     env.render(filepath="control.txt.acmi")
-    agent0 = ManeuverAgent(agent_id=0, maneuver='triangle')
+    agent0 = ManeuverAgent(agent_id=0, maneuver='n')
     agent1 = PursueAgent(agent_id=1)
     reward_list = []
     while True:
