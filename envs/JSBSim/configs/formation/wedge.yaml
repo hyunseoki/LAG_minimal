@@ -1,0 +1,77 @@
+# Formation Flight Config - Wedge Formation
+# 1 Leader + 3 Followers in Wedge shape
+
+task: formation
+
+# simulation config
+sim_freq: 60
+agent_interaction_steps: 12 # step 0.2s
+
+# termination config
+max_steps: 1000             # episode length: 200s
+altitude_limit: 2500
+acceleration_limit_x: 10.0
+acceleration_limit_y: 10.0
+acceleration_limit_z: 10.0
+
+# formation task config
+formation_type: wedge       # wedge, line, echelon
+num_followers: 3
+formation_spacing: 100      # meters (distance behind leader)
+formation_lateral: 80       # meters (lateral distance in wedge)
+
+# aircraft config (1 leader + 3 followers)
+aircraft_configs: {
+  A0100: {
+    color: Red,
+    model: f16,
+    init_state: {
+      ic_long_gc_deg: 120.0,
+      ic_lat_geod_deg: 60.0,
+      ic_h_sl_ft: 20000,
+      ic_psi_true_deg: 0.0,
+      ic_u_fps: 800.0,
+    }
+  },
+  A0101: {
+    color: Red,
+    model: f16,
+    init_state: {
+      ic_long_gc_deg: 120.01,
+      ic_lat_geod_deg: 59.95,
+      ic_h_sl_ft: 20000,
+      ic_psi_true_deg: 0.0,
+      ic_u_fps: 800.0,
+    }
+  },
+  A0102: {
+    color: Red,
+    model: f16,
+    init_state: {
+      ic_long_gc_deg: 120.0,
+      ic_lat_geod_deg: 59.95,
+      ic_h_sl_ft: 20000,
+      ic_psi_true_deg: 0.0,
+      ic_u_fps: 800.0,
+    }
+  },
+  A0103: {
+    color: Red,
+    model: f16,
+    init_state: {
+      ic_long_gc_deg: 119.99,
+      ic_lat_geod_deg: 59.95,
+      ic_h_sl_ft: 20000,
+      ic_psi_true_deg: 0.0,
+      ic_u_fps: 800.0,
+    }
+  }
+}
+
+# (longitude, latitude, altitude)
+battle_field_center: [120.0, 60.0, 0.0]
+
+# reward config
+AltitudeReward_safe_altitude: 4.0
+AltitudeReward_danger_altitude: 3.5
+AltitudeReward_Kv: 0.2

@@ -11,7 +11,7 @@ from pathlib import Path
 sys.path.append(os.path.dirname(os.path.dirname(os.path.dirname(os.path.realpath(__file__)))))
 from config import get_config
 from runner.share_jsbsim_runner import ShareJSBSimRunner
-from envs.JSBSim.envs import SingleCombatEnv, SingleControlEnv, MultipleCombatEnv
+from envs.JSBSim.envs import SingleCombatEnv, SingleControlEnv, MultipleCombatEnv, FormationEnv
 from envs.env_wrappers import SubprocVecEnv, DummyVecEnv, ShareSubprocVecEnv, ShareDummyVecEnv
 
 def make_train_env(all_args):
@@ -23,13 +23,15 @@ def make_train_env(all_args):
                 env = SingleControlEnv(all_args.scenario_name)
             elif all_args.env_name == "MultipleCombat":
                 env = MultipleCombatEnv(all_args.scenario_name)
+            elif all_args.env_name == "Formation":
+                env = FormationEnv(all_args.scenario_name)
             else:
                 logging.error("Can not support the " + all_args.env_name + "environment.")
                 raise NotImplementedError
             env.seed(all_args.seed + rank * 1000)
             return env
         return init_env
-    if all_args.env_name == "MultipleCombat":
+    if all_args.env_name in ["MultipleCombat", "Formation"]:
         if all_args.n_rollout_threads == 1:
             return ShareDummyVecEnv([get_env_fn(0)])
         else:
@@ -50,13 +52,15 @@ def make_eval_env(all_args):
                 env = SingleControlEnv(all_args.scenario_name)
             elif all_args.env_name == "MultipleCombat":
                 env = MultipleCombatEnv(all_args.scenario_name)
+            elif all_args.env_name == "Formation":
+                env = FormationEnv(all_args.scenario_name)
             else:
                 logging.error("Can not support the " + all_args.env_name + "environment.")
                 raise NotImplementedError
             env.seed(all_args.seed * 50000 + rank * 1000)
             return env
         return init_env
-    if all_args.env_name == "MultipleCombat":
+    if all_args.env_name in ["MultipleCombat", "Formation"]:
         if all_args.n_eval_rollout_threads == 1:
             return ShareDummyVecEnv([get_env_fn(0)])
         else:
@@ -70,7 +74,7 @@ def make_eval_env(all_args):
 
 def parse_args(args, parser):
     group = parser.add_argument_group("JSBSim Env parameters")
-    group.add_argument('--scenario-name', type=str, default='1v1/ShootMissile/HierarchyVsBaseline',
+    group.add_argument('--scenario-name', type=str, default='1/heading',
                        help="Which scenario to run on")
     group.add_argument('--render-mode', type=str, default='txt',
                        help="txt or real_time")
@@ -144,7 +148,7 @@ def main(args):
     }
 
     # run experiments
-    if all_args.env_name == "MultipleCombat":
+    if all_args.env_name in ["MultipleCombat", "Formation"]:
         runner = ShareJSBSimRunner(config)
     else:
         if all_args.use_selfplay:
